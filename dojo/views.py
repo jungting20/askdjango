@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
+import os
 # Create your views here.
+from askdjango import settings
+
 
 def mysum(request,number):
     # request:HttpRequest
@@ -11,5 +14,44 @@ def mysum(request,number):
 def hello(request,name,age):
 
     return HttpResponse('hello'+name+age)
+
+
+def post_list1(request):
+    name = '공유'
+    return HttpResponse('''
+    <h1>AskDjango</h1>
+    <p>{name}</p>
+    <p>장고의 왕</p>
+    '''.format(name=name))
+
+
+def post_list2(request):
+    name = '공유'
+    return render(request,'dojo/post_list.html',{'name':name})
+
+
+def post_list3(request):
+    name = '공유'
+    return JsonResponse({
+        'message':'안녕 파이썬 장고',
+        'items':['파이선','장고'],
+    },json_dumps_params={'ensure_ascii':False})
+
+
+def excel_download(request):
+    'FBV:엑셀 다운로드 응답하기'
+    filepath = 'c:/testman/aaaa.xlsx'
+    #경로는재끼고 파일만 뽑아주는 거임
+    #만약 같은경로에 있다면
+    #filepath = os.path.join(settings.BASE_DIR,'aaaa.xlsx')
+    filename = os.path.basename(filepath)
+    with open(filepath,'rb') as f:
+        response = HttpResponse(f,content_type='application/vnd.ms-excel')
+
+        response['Content-Disposition']='attachment; filename="{}"'\
+            .format(filename)
+        return response
+
+
 
 
