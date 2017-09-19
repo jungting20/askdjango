@@ -11,3 +11,5 @@ def mysum(request,number):
 def hello(request,name,age):
 
     return HttpResponse('hello'+name+age)
+
+
