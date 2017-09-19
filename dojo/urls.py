@@ -1,6 +1,6 @@
 from django.conf.urls import url,include
 from django.contrib import admin
-from . import views
+from . import views,views_cbv
 urlpatterns = [
     #하나에서 여러개의 값을 받고 싶으면 음
     #이렇게하면 슬러쉬를 두번쓸 가능성도 있음
@@ -10,5 +10,10 @@ urlpatterns = [
     url(r'^list1/$',views.post_list1),
     url(r'^list2/$',views.post_list2),
     url(r'^list3/$',views.post_list3),
-    url(r'^excel/$',views.excel_download)
+    url(r'^excel/$',views.excel_download),
+
+    url(r'^cbv/list1/$',views_cbv.post_list1),
+    url(r'^cbv/list2/$',views_cbv.post_list2),
+    #url(r'^cbv/list3/$',views_cbv.post_list3),
+    #url(r'^cbv/excel/$',views_cbv.excel_download)
 ]

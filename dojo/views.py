@@ -4,6 +4,18 @@ import os
 # Create your views here.
 from askdjango import settings
 
+#django.views.generic
+#뷰 사용패턴을 일반화시켜놓은 뷰의 모음
+#.as_view()클래스함수를 통해 FBV를 생성해줌!!!
+#아 기본 샘플구조는
+#이런식으로 되어있음
+#class SampleTemplateVIew(object):
+ #   @classmethod
+  #  def as_view(cls,template_name):
+   #     def view_fn(request):
+    #        return render(request,template_name)
+     #   return view_fn
+
 
 def mysum(request,number):
     # request:HttpRequest
@@ -51,6 +63,8 @@ def excel_download(request):
         response['Content-Disposition']='attachment; filename="{}"'\
             .format(filename)
         return response
+
+
 
 
 
