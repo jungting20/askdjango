@@ -57,7 +57,7 @@ def excel_download(request):
     #만약 같은경로에 있다면
     #filepath = os.path.join(settings.BASE_DIR,'aaaa.xlsx')
     filename = os.path.basename(filepath)
-    with open(filepath,'rb') as f:
+    with open(filepath,'rb') as f: #with는 닫기까지 해줌 close 이거
         response = HttpResponse(f,content_type='application/vnd.ms-excel')
 
         response['Content-Disposition']='attachment; filename="{}"'\

@@ -1,7 +1,9 @@
+
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Post
+from .models import Post,Comment,Tag
+
 
 #단 한번만 등록 언레지스터도있음
 #등록법 1
@@ -42,4 +44,15 @@ class PostAdmin(admin.ModelAdmin):
         self.message_user(request, '{}의 포스팅을 draft상태로 변경'.format(updated_count))
 #admin.site.register(Post,PostAdmin)
 #이렇게도하고
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['author']
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['names',]
+
+
 

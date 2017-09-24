@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'debug_toolbar', #디버그툴바
     'blog',
     'dojo',
+    'accounts',
 
 ]
 

@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ValidationError
 import re
+from django.conf import settings
 # Create your models here.
 from django.utils.datetime_safe import datetime
 
@@ -37,7 +38,7 @@ def lnglat_validator(value):
 #save()함수로 한번씩 요청보내는 쓰레기같은 방법과
 #가급적이면 update로 사용
 # queryset = model.objects.all()
-# queryset = model.objectes.update(tags = 'python,django')라는 한번에 보내주는 훌륭한함수가있음
+# queryset = model.objectes.all().update(tags = 'python,django')라는 한번에 보내주는 훌륭한함수가있음
 #delete!!
 #이거도 같음 대신 이건 인스턴스도 delete고 opjects.delete() 이것도 같음
 #웹의 속도는 결국 데이터베이스가 결정 그러니 opjects.delete() 추천 언어의종류는 사실상 거의 상관없음
@@ -54,14 +55,19 @@ class Post(models.Model):
         ('p','Published'),
         ('w','Withdrawn')
     )
-    authon = models.CharField(max_length=20,default='test')
     title = models.CharField(max_length=100
     ) #html select 를 만들어줌 choices 옵션의 힘
     content = models.TextField(blank=True,null=True)
     lnglat = models.CharField(max_length=50,blank=True,validators=[lnglat_validator])
-    #이러고 내가 makemigrations 하니까 나머지 값들에 status 필드에 뭘 넣어줄지 정하라해서
+    user = models.ForeignKey(settings.AUTH_USER_MODEL) #외래키를 추가하고 makemigration 하려하면 당연히 
+    #디폴트값 뭐로할거냐 이렇게 나옴 이상태에서는 int 로 적어줘야함 왜냐하면 외래키로 필드만들면 필드명_id 로 만들어지기 때문이다!!!!!!!!
+    #지금 user로 마이그레이션 했으니 user_id 로 만들어진다!
+    #사실상 외래키필드는 int임 ㅋ
+    status = models.CharField(max_length=1,choices=STATUS_CHOICES) #이러고 내가 makemigrations 하니까 나머지 값들에 status 필드에 뭘 넣어줄지 정하라해서
     #'d' 로했더니 'Draft'가 들어갔음!
-    status = models.CharField(max_length=1,choices=STATUS_CHOICES)
+    tag_set = models.ManyToManyField('Tag',blank=True) #문자열로 지정해주자 웬만하면 대부분의 관계 필드정해줄때는 문자열로 ㄱㄱ
+    #같은 앱이 아닐경우 'auth.Tag' 이런식으로 앱이름을 써주면됨
+    #manytomany 필드는 블랭크옵션 주는게 낫다
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -70,6 +76,72 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post)
+    author = models.CharField(max_length=20)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+#manytomanyto 관계는 생성을하게되면 rdbms특성상 가운데 연결하는 다리역할을하는 데이터베이스를 하나 생성해야한다
+#그게 _set이라는 테이블로생성됨
+#이걸 접근할때 Post.objects.filter(필드명__컬럼명 = 'django')
+#이걸 접근할때 Post.objects.filter(필드명__컬럼명__in = ['django','askdjango'])
+#이걸 접근할때 Post.objects.filter(tag_set__컬럼명__in = ['django','askdjango'])
+#이런식으로 __in 으로도 접근가능하다
+class Tag(models.Model):
+    names = models.CharField(max_length=50,unique=True)
+
+
+    def __str__(self):
+        return self.names
+
+#아하 기본으로 user모델을 제공함 이걸 내가 바꿀수는없어
+#그래서 이거랑 1:1로 대응되는 모델을 하나 생성하는거지
+#related_name의 중요성!
+#post = Post.objects.first() 하나얻어와서
+#Comment.objects.filter(post = post) <방법1
+#post.comment_set.all() << 이것이 방법2
+
+#방법2를 설명하자면 1:N의 관계에서 1측.참조할모델소문자_set.all() 하면 전부가져옴 이게포인트
+#그냥 쉽게 생각 1측에 셋되어있는 코멘트모델을 가져와라 뭐 이런거임 사실상
+
+#외래키 지정시 속성에 related_name을 지정해주면 접근할때 이름을 바꿀 수있음 post.comment_set.all()
+#comment_set 이부분을 지정해준다 이거지 ㅇㅋ? 지정해주지 않으면 디폴트는 저거임
+
+
+
+#manyTomanyfield
+#post = Post.objects.first()
+#tag1 = Tag.objects.all()[0]
+#tag2 = Tag.objects.all()[1]
+#tag3 = Tag.objects.all()[2]
+#tag_qs = Tag.objects.filter(name__endswith('django'))
+
+
+
+#추가하는법
+#post.tag_set.add(tag1) 이런식이거나
+#post.tag_set.add(*tag_qs) 쿼리셋은 이런식으로 해줘야함! <이것이 가장 유용하다 크큭
+
+
+#갯수 카운트하는 2가지 방법
+#len(Post.objects.all()) 이방법과
+#Post.objects.all().count()) 이방법이있음 성능차이는 count() 이게 더 월등함!!! 이건 쿼리에서 끊고 위에는 다 받아와서 또 읽음
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

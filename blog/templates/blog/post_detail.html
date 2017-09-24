@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+    <title>
+        {{ post.title }}
+    </title>
+    <body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content|linebreaks }}</p> {% comment %}이건 장고 템플릿테그의 개행문자 넣어주는거임 <p>
+    linebreakbr 은 br 태그로줌
+    로감싸줌{% endcomment %}
+    <hr/>
+
+<h3>댓글</h3>
+    <ul>
+{% for comment in post.comment_set.all %}
+    <li>{{ comment.message }}
+    <small>by {{ comment.author }}</small>
+    <small>at {{ comment.updated_at }}</small>
+</li>
+{% endfor %}
+</ul>
+</body>
+
+</head>
+
+
+</html>
