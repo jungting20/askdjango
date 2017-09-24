@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-<h1>안녕 하세요 여러분</h1>
-
+{% extends "blog/layout.html" %}
+{% block content %}
 <form action="" method="get">
     <input type="text" name="q" value="{{ q }}"/>
     <input type="submit" value="검색">
@@ -18,12 +15,6 @@
         {{ post.updated_at }}
     </li>
     </ul>
-
-
 {% endfor %}
-</body>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-</html>
+{% endblock %}
+

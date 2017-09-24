@@ -61,12 +61,25 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'askdjango.urls'
 
+
+
+#Django Template Loader
+#여러가지가 있지만 가장 중요한건 app_directories.Loader 과 filesystem.Loader 존재
+#템플릿 디렉토리가 있을 후보 디렉토리 리스트를 작성 장고 서버 초기 시작시에만 1회 작성됨
+
+
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR,'askdjango','templates'),] #앱 아래 templates파일들은 APP_DIRS True로 줬기때문에
+        #템플릿 리스트별로 다들어감 그러나 내가 만든 최상위 레이아웃은 프로젝트 앱 아래있는게 아니니 따로 지정해 줘야한다
+        #템플릿이름들은 중복되면 안됨 리스트만들어서 위부터 찾아서 내려오므로 겹치면 다른 템플릿이 나올 수도 있음
+        #그래서 앱/templates/앱/*.html 이런식으로 만들어주는거임 앱은 유일해야함
         ,
-        'APP_DIRS': True,
+        'APP_DIRS': True,#이걸 True 로 주게되면 앱아래 templates 경로까지는 무조건 찾음
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
