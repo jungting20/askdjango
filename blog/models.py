@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import ValidationError
 import re
 from django.conf import settings
+from django.core.urlresolvers import reverse
 # Create your models here.
 from django.utils.datetime_safe import datetime
 
@@ -76,6 +77,17 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+    #필히 사용하자
+    def get_absolute_url(self):
+        return reverse('blog:post_detail',args=[self.id])#이걸 해주게되면 resolve_url(post) 이런식으로 사용할수있게됨
+    #resolve_url 함수는 가장먼저 저거 부터 찾음 get_absolute_url 부터 찾음
+    #redirect는 내부적으로 resolve_url을 사용 하므로 redirect(post) 이렇게 쓰면됨 그럼 /blog/10/ 으로 이동
+    #여기에 등록이 되어있으니까 저렇게 쓸수있는거임 안그러면 어딘지 어떻게알고감
+
+    #이것의 엄청난 활용은 나중에 배울 CreateView,UpdateVIew등에서 내용 수정시 success_url 을 사용해서 이동시켜줘야하는데
+    #이게 있으면 그냥 알아서 이동함 유알엘 찾아서 ㅋ 
 
 class Comment(models.Model):
     post = models.ForeignKey(Post)
