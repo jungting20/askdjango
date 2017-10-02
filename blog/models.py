@@ -87,7 +87,7 @@ class Post(models.Model):
     #여기에 등록이 되어있으니까 저렇게 쓸수있는거임 안그러면 어딘지 어떻게알고감
 
     #이것의 엄청난 활용은 나중에 배울 CreateView,UpdateVIew등에서 내용 수정시 success_url 을 사용해서 이동시켜줘야하는데
-    #이게 있으면 그냥 알아서 이동함 유알엘 찾아서 ㅋ 
+    #이게 있으면 그냥 알아서 이동함 유알엘 찾아서 ㅋ
 
 class Comment(models.Model):
     post = models.ForeignKey(Post)
@@ -145,7 +145,7 @@ class Tag(models.Model):
 
 
 
-
+#datetime 인스턴스는 strftime()함수로 포맷할수있음
 
 
 
