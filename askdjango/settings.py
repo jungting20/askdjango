@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'blog',
     'dojo',
     'accounts',
+    'bootstrap3', #pip install django-bootstrap3 해서 설치
 
 ]
 

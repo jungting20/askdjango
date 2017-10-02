@@ -37,6 +37,9 @@ class PostForm(forms.ModelForm):
         widgets = {
             'user_agent':forms.HiddenInput,#이러면 히든 필드로 들어감
             #값은 자바스크립트로 넣어줄거임
+            #출력시 form.hidden_fields  을 통해 히든 필드 순회를 돌수있음
+            #form.visible_fields 이렇게 두개를 나눠서 하는걸 추천
+            #이방법이 추천됨
         }
 
 class GameUserSignupForm(forms.ModelForm):
