@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404,redirect
 from django.http import HttpResponse
 from .models import Post
 from .forms import PostForm
+from django.contrib import messages
 
 #포스팅에대한 내용을 볼건데 그 포스팅이 없는 것에 접근할때는 무조건 404로 리턴해줘야함
 #500에러가아님 하지만 처리해주지 않으면 500에러 발생
@@ -63,11 +64,12 @@ def post_new(request):
         form = PostForm(request.POST,request.FILES)
         if form.is_valid():
             post = form.save() #save() 메서드는 자동으로 인스턴스를 리턴함
+            messages.success(request,'새 포스팅을 저장했습니다.')#리다이렉트 전에 저장해주는 거임
+            #messages로 저장됨 이걸 html에서 순회돌아서 tag와 message를 뽑으면됨!
             return redirect(post) #겟앱솔루트 유알엘
 
     else:
         form  = PostForm()
-
-    return render(request,'blog/post_from.html',{
+    return render(request,'blog/post_form.html',{
         'form':form
     })

@@ -1,13 +1,16 @@
 {% load bootstrap3 %}
 
+
+
+
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-
 {% comment %}
 지린다 이건 귀찮을때 그냥 쓰면됨
 서비스에는 쓰기좀 그럼
 {% endcomment %}
+
+
 
 <div class = "container">
     <div class="row">
@@ -26,7 +29,6 @@
 
 
 <script>
-
     var dom = document.getElementById('{{ form.user_agent.id_for_label }}');
     dom.value = navigator.userAgent;
 </script>

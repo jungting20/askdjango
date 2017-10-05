@@ -11,5 +11,12 @@
 {% block content %}
 {% endblock %}
 
+
+{% if messages %}
+    {% for message in messages %}
+        {{ message.tags }}{# 메세지레벨 success,waring,debug 뭐 이런 메세지 레벨임#}
+        {{ message.message }}{# 메세지 내용 #}
+    {% endfor %}
+{% endif %}
 </body>
 </html>

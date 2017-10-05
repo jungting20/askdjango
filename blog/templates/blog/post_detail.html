@@ -1,5 +1,5 @@
 {% extends "blog/layout.html" %}
-
+{% load imagekit %}{# 썸네일을 위함 여기서 바로 할수있음 #}
 {% block title %}
 {{ post.title }}
 {% endblock %}
@@ -8,6 +8,15 @@
     <p>{{ post.content|linebreaks }}</p> {% comment %}이건 장고 템플릿테그의 개행문자 넣어주는거임 <p>
     linebreakbr 은 br 태그로줌
     로감싸줌{% endcomment %}
+    {% if post.photo %}{# 가장 좋은 케이스 이렇게 해주지 않으면 업로드가 되어있지 않은 게시물은 오류가 나버림   #}
+        {# .url은 앞에 /media/를 기본으로 붙여줌  .path는 절대경로 setting.MEDIA_ROOT가 Prefix로 붙음#}
+    <p>{% comment %}<img src="{{ post.photo_thumbnail.url }}"> </p> 따로 저장해서 쓰는법{% endcomment %}
+        <img src="{{ post.photo.url }}"> </p>
+        {% thumbnail "100x100" post.photo %} {# 이렇게하면 바로 img 태그 생성 #}
+        {% thumbnail "100x100" post.photo as thumb %} {# 여기는 변수에 저장함 img태그 생성은 되지 않음 #}
+        <img src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}">
+        {% thumbnail "100x100" post.photo -- style="" onclick="" class="" %}{# 이런식으로 쓸 수 있음 #}
+    {% endif %}
     <hr/>
 <h3>댓글</h3>
     <ul>

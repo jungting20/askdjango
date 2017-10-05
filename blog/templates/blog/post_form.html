@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block title %}
+    <h1>newPost</h1>
+{% endblock %}
+
+
+{% block content %}
+    <form action="{% url 'blog:post_form' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="작성">
+    </form>
+{% endblock %}

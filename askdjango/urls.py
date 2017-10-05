@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url,include
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.shortcuts import redirect
 from askdjango import settings
@@ -36,6 +37,9 @@ urlpatterns = [
 
 
 ]
+#이건 개발편의를 위해 임의로 룰을 추가해서 하는거임
+#settings.DEBUG =False에서는 static 함수에서 빈 리스트를 리턴함
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 
 

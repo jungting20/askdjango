@@ -3,6 +3,8 @@ from django.forms import ValidationError
 import re
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from imagekit.models import ImageSpecField,ProcessedImageField
+from imagekit.processors import Thumbnail
 # Create your models here.
 from django.utils.datetime_safe import datetime
 
@@ -59,6 +61,15 @@ class Post(models.Model):
     title = models.CharField(max_length=100
     ) #html select 를 만들어줌 choices 옵션의 힘
     content = models.TextField(blank=True,null=True)
+    photo = models.ImageField(blank=True,upload_to='blog/post/%Y/%m/%d')#업로드시 저장경로 결정
+    #photo를 ProcessedImageField 이걸로 만듬
+    #ProcessedImageField(blank=True,upload_to='blog/post/%Y/%m/%d',processors=[Thumbnail(300,300)],format='JPEG',options={'quality':60}# )
+    photo_thumbnail = ImageSpecField(source='photo',
+                                     processors=[Thumbnail(300,300)],
+                                     format = 'JPEG',
+                                     options={'quality':60}) #원본 유지하면서 썸네일까지 같이 만듬
+    #원본유지하기 싫으면 ProcessedImageField
+
     lnglat = models.CharField(max_length=50,blank=True,validators=[lnglat_validator])
     user = models.ForeignKey(settings.AUTH_USER_MODEL) #외래키를 추가하고 makemigration 하려하면 당연히 
     #디폴트값 뭐로할거냐 이렇게 나옴 이상태에서는 int 로 적어줘야함 왜냐하면 외래키로 필드만들면 필드명_id 로 만들어지기 때문이다!!!!!!!!
