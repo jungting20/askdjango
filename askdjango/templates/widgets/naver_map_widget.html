@@ -1,0 +1,43 @@
+ <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId={{ naver_client_id }}&submodules=geocoder">
+ </script>
+
+ <style>
+     #naver_map_point_{{ id }} {
+         width: {{ width }};
+         height: {{ height }};
+         background-color: red;
+     }
+
+ </style>
+
+ <div id="naver_map_point_{{ id }}">
+     </div>
+
+
+
+
+     <script>
+         //여기서 맵그림
+         (function () {
+    var base_point = new naver.maps.LatLng({{ base_lat }},{{ base_lng }});
+    var dom = document.getElementById('naver_map_point_{{ id }}');
+    var map = new naver.maps.Map(dom, {
+        center : base_point
+    });
+    var marker = new naver.maps.Marker({
+        position:base_point,
+        map : map
+    })
+          //지도 클릭하는 부분
+    naver.maps.Event.addListener(map,'click',function (e) {
+        //e.coord에 위도경도가 지정되어있음 마커 위치 변경
+        marker.setPosition(e.coord)
+        document.getElementById('{{ id }}').value = e.coord.lng() + "," + e.coord.lat();
+    });
+
+})();
+     </script>
+
+
+
+

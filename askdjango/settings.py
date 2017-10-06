@@ -213,3 +213,4 @@ MESSAGE_LEVEL = constants.DEBUG #지금부터 debug 레벨의 messages를 남길
 MESSAGE_TAGS = {constants.ERROR:'danger'} #message.error 이걸 danger로 바꾼거임
 
 
+NAVER_CLIENT_ID='kWcA4ikd7BtZtvipCJqx' #api 신청시 받은 아이디

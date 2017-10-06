@@ -70,7 +70,7 @@ class Post(models.Model):
                                      options={'quality':60}) #원본 유지하면서 썸네일까지 같이 만듬
     #원본유지하기 싫으면 ProcessedImageField
 
-    lnglat = models.CharField(max_length=50,blank=True,validators=[lnglat_validator])
+    lnglat = models.CharField(max_length=50,blank=True,validators=[lnglat_validator],null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL) #외래키를 추가하고 makemigration 하려하면 당연히 
     #디폴트값 뭐로할거냐 이렇게 나옴 이상태에서는 int 로 적어줘야함 왜냐하면 외래키로 필드만들면 필드명_id 로 만들어지기 때문이다!!!!!!!!
     #지금 user로 마이그레이션 했으니 user_id 로 만들어진다!
