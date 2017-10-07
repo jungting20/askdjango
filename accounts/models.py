@@ -8,8 +8,10 @@ from django.conf import settings
 class Profile(models.Model):
 
     # user = models.OneToOneField(User) #그니까 이렇게하면 객체하나에 user하나만 들어가게 할수있음
-    user = models.OneToOneField(settings.AUTH_USER_MODEL) #이렇게 하는 이유는 AbstractUser 이걸 상속받아서 나만의 유저모델을
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    #이렇게 하는 이유는 AbstractUser 이걸 상속받아서 나만의 유저모델을
     #만들고 싶으면 다 바꿔줘야함 하지만 저렇게 참조해주면 저 값만 나만의 유저모델값으로 바꿔주면됨!
+    #그리고 이거 user_id 로 interger 필드로 들어감 user 모델의 id 값이 들어가는거지
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=50)
 

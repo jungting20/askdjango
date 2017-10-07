@@ -1,5 +1,6 @@
 {% extends "blog/layout.html" %}
 {% block content %}
+    <h1>{{ current_datetime }}</h1> {% comment %}얘는 내가 컨텍스트프로세서에 등록해서 넘겨준 값임 디폴트로 막넘어감{% endcomment %}
 <form action="" method="get">
     <input type="text" name="q" value="{{ q }}"/>
     <input type="submit" value="검색">

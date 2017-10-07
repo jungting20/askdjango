@@ -89,11 +89,16 @@ TEMPLATES = [
         'APP_DIRS': True,#이걸 True 로 주게되면 앱아래 templates 경로까지는 무조건 찾음
         'OPTIONS': {
             #요것이 메세지를 내보내 주는거임 'messages':message 뭐 이런식으로 보내줌 템플릿에
+            #여기에 지정되어있는 것들은 템플릿으로 렌더링 할때마다 내가 지정해주지 않아도 넘어가는 것들
+            #사전 형식으로 넘어감 그래서 user 로 쓸수있는거임 디폴트값이 있음
+            #커스텀으로 내가 추가할수도있음
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blog.context_processors.blog',#blog 아래 context_processors에 blog 함수를 리턴하겠다 이거임
+                #그냥 디폴트로 넘기는 값을 여기다 정해줄 수 있음
             ],
         },
     },

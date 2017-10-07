@@ -1,9 +1,11 @@
 
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,JsonResponse
 import os
 from django.shortcuts import redirect
 from dojo.models import Post
+from django.views.generic import DetailView,ListView
 from dojo.forms import PostForm
 # Create your views here.
 from askdjango import settings
@@ -158,3 +160,23 @@ def post_edit(request,id):
     return render(request,'dojo/post_form.html',{
         'form':form
     })
+
+
+# def post_detail(request,id):
+#     post = get_object_or_404(Post,id=id)
+#     return render(request,'dojo/post_detail.html',{
+#         'post':post
+#     })
+
+#위코드와 같음 안에 모든것이 구현되어있음
+# post_detail = DetailView.as_view(model=Post,pk_url_kwarg='id') #이렇게해주면 값넘겨줄때 (?P<id>\d 뭐 이런식으로 넘겨야함)
+#1개 모델에서 얻는데에만 쓰고 여러개의 모델에서 얻을때에는 그냥 FBV를 쓰자 이게 더 나음
+#적절하게 섞어서 쓰자
+#1.리스트뷰,디테일뷰,2.폼뷰,크리에이트뷰,업데이트뷰,딜리트뷰(수정,생성쪽)3.날짜리스트뷰
+post_detail = DetailView.as_view(model=Post) #asview 로 함수형을 뽑는거임
+
+
+
+
+
+

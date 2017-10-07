@@ -92,7 +92,9 @@ class Post(models.Model):
 
     #필히 사용하자
     def get_absolute_url(self):
-        return reverse('blog:post_detail',args=[self.id])#이걸 해주게되면 resolve_url(post) 이런식으로 사용할수있게됨
+        return reverse('blog:post_detail',args=[self.id])#리턴값은 문자열 /blog/10 이런식으로 만들어줌
+        #get_absolute_url 이함수명에 리턴값은 url 형식의 문자열로 리턴만 해주면 그리로 리다이렉트 침
+        #이걸 해주게되면 resolve_url(post) 이런식으로 사용할수있게됨
     #resolve_url 함수는 가장먼저 저거 부터 찾음 get_absolute_url 부터 찾음
     #redirect는 내부적으로 resolve_url을 사용 하므로 redirect(post) 이렇게 쓰면됨 그럼 /blog/10/ 으로 이동
     #여기에 등록이 되어있으니까 저렇게 쓸수있는거임 안그러면 어딘지 어떻게알고감

@@ -7,6 +7,7 @@ urlpatterns = [
     #해결법은 람다임
     url(r'^new/$',views.post_new),
     url(r'^(?P<id>\d+)/edit/$',views.post_edit),
+    url(r'^(?P<pk>\d)/$',views.post_detail),#클래스(DetailView) 뷰를 쓰기위해 pk로바꿔줌 이러면 인자 지정해주지 않아도 된다
     url(r'^sum/(?P<number>[\d/]+)/$',views.mysum),
     url(r'^hello/(?P<name>[ㄱ-힣]{2,4})/(?P<age>\d{1,2})/$',views.hello),
     url(r'^list1/$',views.post_list1),
