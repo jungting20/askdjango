@@ -6,6 +6,7 @@ from .forms import PostForm
 from django.contrib import messages
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 from django.core.urlresolvers import reverse,reverse_lazy
+from .models import Comment
 #포스팅에대한 내용을 볼건데 그 포스팅이 없는 것에 접근할때는 무조건 404로 리턴해줘야함
 #500에러가아님 하지만 처리해주지 않으면 500에러 발생
 #그래서 get_object_or_404 를 쓰거나 예외처리해줘야한다
@@ -14,14 +15,26 @@ from django.core.urlresolvers import reverse,reverse_lazy
 
 
 
+
+#요렇게
+# class PostListVIew(ListView):
+#     model = Post
+#     queryset = Post.objects.all().prefetch_related('tag_set','comment_set')
+#     paginate_by = 10
+#prefetch_related 이거 다시 공부해야함 무슨말인지 모르겠다
+
+# post_list = ListVIew.as_view(model=Post,paginate_by=10,querset=Post.object.all().prefetch_related('tag_set','comment_set'))
+# post_list = PostListVIew.as_view() 이렇게 해도 같음
 #http://localhost:8000/blog/?page=2 이런식으로 페이지 넘어갈 수 있음!!
 #모델명소문자_list 로 리스트로 접근가능
 #디폴트 템플릿은 앱이름/모델명소문자_list.html ㅋ
-# post_list = ListView.as_view(model=Post,paginate_by=10)
+#쿼리셋을 지정해주지 않으면 알아서 all() 로 불러서 혼자 접근해서 뷰만들어줌 다른걸 쓰고싶으면 저렇게 해줘야함
+
 
 
 def post_list(request):
-    qs = Post.objects.all() #<<이시점에는 데이터베이스 접속이 이루어지는게아님
+    qs = Post.objects.all()
+    #<<이시점에는 데이터베이스 접속이 이루어지는게아님
     #이것의 매핑은 blog/templates/blog/post_list.html
     print(request.user)
     q = request.GET.get('q','')
@@ -109,3 +122,14 @@ post_delete =DeleteView.as_view(model=Post,success_url=reverse_lazy('blog:post_l
 
 
 
+def comment_list(request):
+    #외래키의  필드명을 써주는거임 그러면 이너조인으로 싹다불러옴
+    #이렇게 해주지 않으면 셀렉트로 하나 불러와서 거기서 post.id 찾아서 그걸로 다시 Post에서 select 날려서
+    #하나씩 뽑아서 리스트에 담음 상당히 비효율
+    #그냥 조인으로 한번에 다 불러와서 코드내에서 거르는게 나음
+    #필드명을 적어주는 거임
+    #외래키나 원투원필드일때 써줌
+    comment_list = Comment.objects.all().select_related('post')
+    return render(request,'blog/comment_list.html',{
+        'comment_list':comment_list
+    })

@@ -26,7 +26,7 @@ class PostAdmin(admin.ModelAdmin):
     #컬럼을 추가하고 보여주고 싶은 컬럼명을 함수로한다음
     #그것을 추가해줌
     #적용후 함수의 이름을 list_display에 적용해줘야함
-    #두번쨰인자는 그 모델의 인스턴스임!
+    #두번째인자는 그 모델의 인스턴스임!
     def content_size(self,post):
         #post 인스턴스에 content 필드 접근1
         #html 태그넣고 싶으면 maek_safe 함수 쓰면됨
@@ -47,7 +47,24 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['author']
+    list_display = ['id','author','post_content_len']
+
+    #방법1
+    # list_select_related = ['post']
+
+
+
+    #방법 2
+    def get_queryset(self,request):
+        qs = super().get_queryset(request)
+        return qs.select_related('post')
+
+    #요렇게 해버리면 comment 뽑아서 거기서 post_id 확인해서 하나하나 불러와서 보여줌 그래서
+    #comment 갯수만큼 쿼리가 실행됨 상당히 빡세지
+    #select_related('post') 적용해주면 빨라짐
+    #어드민에서 적용하는법!
+    def post_content_len(self,comment):
+        return '{}글자'.format(len(comment.post.content))
 
 
 @admin.register(Tag)

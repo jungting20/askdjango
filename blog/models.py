@@ -103,6 +103,9 @@ class Post(models.Model):
     #이게 있으면 그냥 알아서 이동함 유알엘 찾아서 ㅋ
 
 class Comment(models.Model):
+    #intger 필드 Post의 id 값이 저장
+    #필수 필드지 이렇게 해주면
+    #Post 객체를 post로 지정해주면 알아서 id 값으로 저장이됨 save시에
     post = models.ForeignKey(Post)
     author = models.CharField(max_length=20)
     message = models.TextField()

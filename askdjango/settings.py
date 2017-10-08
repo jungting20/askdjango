@@ -45,9 +45,13 @@ INSTALLED_APPS = [
     'dojo',
     'accounts',
     'bootstrap3', #pip install django-bootstrap3 해서 설치
-    'imagekit' #pip install django-imagekit 썸네일 도와줌
+    'imagekit', #pip install django-imagekit 썸네일 도와줌
+    'raven.contrib.django.raven_compat',#sentry를 이용한 로그 찍기 깃 활용 ㄱㄱ
 
 ]
+
+
+
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware', #디버그툴바
@@ -219,3 +223,28 @@ MESSAGE_TAGS = {constants.ERROR:'danger'} #message.error 이걸 danger로 바꾼
 
 
 NAVER_CLIENT_ID='kWcA4ikd7BtZtvipCJqx' #api 신청시 받은 아이디
+
+
+
+import raven
+
+GIT_ROOT = os.path.join(BASE_DIR)#프로젝트 안에.git 이있으면 그냥써주면됨
+# #난 보통 그 프로젝트를 지정ㄹ하니 이렇게 해주자
+
+if os.path.exists(os.path.join(GIT_ROOT,'.git')):
+    release = raven.fetch_git_sha(GIT_ROOT) # 현재 최근 커밋해서 획득
+else:
+    release = 'dev'
+
+#sentry에 로그인하면 그 아이디마다 고유 값이 있음 그걸 쓰는거임
+#그냥 가이드에 나온거 그대로쓰면됨
+RAVEN_CONFIG = {
+    'dsn': 'https://c22c15949fa8487faa97d6119db4fba8:3cd2c3968df24fa691667bf52af55264@sentry.io/227347',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': release,#디폴트값에서 바꿔줬음
+}
+
+#다 됐나 test는 manage.py에서 raven test 하면됨
+#개발단계에서는 필요가없을수도 있음 어차피 뜨니까 그러나 실서비스에서는 이걸써서 로그찍어서 이걸 통해 버그를 잡는거다
+#이 로그를 메일로 보낼건지 문자로보낼건지 등등 세팅이가능 이건 찾아보자
